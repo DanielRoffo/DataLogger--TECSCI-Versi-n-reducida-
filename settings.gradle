@@ -7,5 +7,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }// Warning: this repository is going to shut down soon
     }
 }
-rootProject.name = "DataLogger"
+rootProject.name = "DataLoggerExtended"
 include ':app'

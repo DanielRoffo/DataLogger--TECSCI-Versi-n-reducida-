@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.datalogger">
+    package="com.example.dataloggerextended">
 
     <application
         android:allowBackup="true"
@@ -10,30 +10,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DataLogger">
         <activity
-            android:name=".ui.view.SignInActivity"
+            android:name="com.example.dataloggerextended.ui.view.SignInActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.view.ForgotPasswordActivity"
+            android:name="com.example.dataloggerextended.ui.view.ForgotPasswordActivity"
             android:exported="true"
-            android:parentActivityName=".ui.view.SignInActivity" />
+            android:parentActivityName="com.example.dataloggerextended.ui.view.SignInActivity" />
         <activity
-            android:name=".ui.view.AddDeviceActivity"
+            android:name="com.example.dataloggerextended.ui.view.AddDeviceActivity"
             android:exported="true"
-            android:parentActivityName=".ui.view.MainActivity" />
+            android:parentActivityName="com.example.dataloggerextended.ui.view.MainActivity" />
         <activity
-            android:name=".ui.view.IndividualSensorDataDisplayActivity"
+            android:name="com.example.dataloggerextended.ui.view.IndividualSensorDataDisplayActivity"
             android:exported="true"
-            android:parentActivityName=".ui.view.MainActivity" />
+            android:parentActivityName="com.example.dataloggerextended.ui.view.MainActivity" />
         <activity
-            android:name=".ui.view.SignUpActivity"
+            android:name="com.example.dataloggerextended.ui.view.SignUpActivity"
             android:exported="true"
-            android:parentActivityName=".ui.view.SignInActivity" />
+            android:parentActivityName="com.example.dataloggerextended.ui.view.SignInActivity" />
         <activity
-            android:name=".ui.view.MainActivity"
+            android:name="com.example.dataloggerextended.ui.view.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.view.IntroActivity"
+            android:name="com.example.dataloggerextended.ui.view.IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

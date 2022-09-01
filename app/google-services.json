@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:627256023244:android:b5026a365651e087eeca69",
         "android_client_info": {
-          "package_name": "com.example.datalogger"
+          "package_name": "com.example.dataloggerextended"
         }
       },
       "oauth_client": [
@@ -39,7 +39,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:627256023244:android:52b5a410ec60a943eeca69",
         "android_client_info": {
-          "package_name": "com.example.datalogger"
+          "package_name": "com.example.dataloggerextended"
         }
       },
       "oauth_client": [
