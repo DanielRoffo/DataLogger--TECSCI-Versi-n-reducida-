@@ -107,7 +107,7 @@ class AddDeviceActivity : AppCompatActivity() {
             if (devHum.isNotEmpty() && devTemp.isNotEmpty() && devName.isNotEmpty()
                 && lineColor != "android.graphics.drawable.ColorDrawable@9faff0"
                 && textColor != "android.graphics.drawable.ColorDrawable@9faff0"){
-                    return true
+                return true
             }
         }
         return false
@@ -118,10 +118,10 @@ class AddDeviceActivity : AppCompatActivity() {
         xvalueTime.add("14:10")
         xvalueTime.add("14:11")
         xvalueTime.add("14:12")
-        entry.add(Entry(10F, 0))
-        entry.add(Entry(20F, 1))
-        entry.add(Entry(40F, 2))
-        entry.add(Entry(60F, 3))
+        entry.add(Entry(0f, 10f))
+        entry.add(Entry(1f, 20f))
+        entry.add(Entry(20f, 30f))
+        entry.add(Entry(3f, 40f))
     }
 
     //Inicializo el Linear Chart
@@ -136,7 +136,7 @@ class AddDeviceActivity : AppCompatActivity() {
 
 
         finaldataset.add(linedataset)
-        val data = LineData(xvalueTime, finaldataset as List<ILineDataSet>)
+        val data = LineData(finaldataset as List<ILineDataSet>)
         binding.lineChart.data = data
 
         styleChart(binding.lineChart)
@@ -193,8 +193,6 @@ class AddDeviceActivity : AppCompatActivity() {
         setDrawHighlightIndicators(true)
         setDrawCircles(false)
         setCircleColor(binding.root.resources.getColor(R.color.gold))
-
-        setDrawCubic(true)
 
         setDrawFilled(true)
         fillDrawable = binding.root.resources.getDrawable(R.drawable.bg_shadow_graph_line_gold)

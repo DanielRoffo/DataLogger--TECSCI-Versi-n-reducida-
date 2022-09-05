@@ -10,6 +10,7 @@
     <color name="light_black2">#222222</color>
     <color name="lighter_black">#2E2E2E</color>
     <color name="hint_color">#757474</color>
+    <color name="light_black_transparent">#66151515</color>
     <color name="tecsci_color">#66ccd1</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gold">#F8A629</color>

@@ -7,12 +7,17 @@ import com.example.dataloggerextended.R
 import com.example.dataloggerextended.databinding.MainDeviceCardRvBinding
 import com.example.dataloggerextended.model.DeviceData
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import java.sql.Date
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // El ViewHolder sera llamado con cada uno de los items del listado
 class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -41,16 +46,18 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             binding.lastTimeActualization.text = "Act. ${dateFormatedtwo.format(listanueva[lastValue]?.time)} hs"
 
             //Cargo los datos dentro de un array en orden y con su indice
-            listanueva.forEachIndexed { index, it ->
+            listanueva.forEach { it ->
                 //Formateo el tiempo
-                val timeToString = dateFormated.format(it?.time)
+                val timestamp = it?.time!!.time
+                var dateToString = dateFormatedtwo.format(timestamp)
+                val index = timestamp.toFloat()
 
-                hum1Entry.add(Entry(it?.hum.toString().toFloat(), index))
-                xvalueTime.add(timeToString)
+                hum1Entry.add(Entry(index, it?.hum.toString().toFloat()))
+
             }
 
             //Inicializo el Linear Chart
-            setLineChartData(xvalueTime, hum1Entry)
+            setLineChartData(hum1Entry)
         }
 
 
@@ -66,18 +73,16 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             binding.lastTimeActualization.text = "Act. ${dateFormatedtwo.format(listanueva[lastValue]?.time)} hs"
 
             //Cargo los datos dentro de un array en orden y con su indice
-            listanueva.forEachIndexed { index, it ->
+            listanueva.forEach { it ->
                 //Formateo el tiempo
-                val timeToString = dateFormated.format(it?.time)
-
-                entry.add(Entry(it?.temp.toString().toFloat(), index))
-                xvalueTime.add(timeToString)
-
-
+                val timestamp = it?.time!!.time
+                var dateToString = dateFormatedtwo.format(timestamp)
+                val index = timestamp.toFloat()
+                entry.add(Entry(index, it?.temp.toString().toFloat()))
             }
 
             //Inicializo el Linear Chart
-            setLineChartData(xvalueTime, entry)
+            setLineChartData(entry)
         }
 
         binding.cardInfo.setOnClickListener {
@@ -86,7 +91,7 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     }
 
     //Inicializo el Linear Chart
-    private fun setLineChartData(xvalueTime: ArrayList<String>, entry: List<Entry>) {
+    private fun setLineChartData(entry: List<Entry>) {
 
 
         val linedataset = LineDataSet(entry, "value")
@@ -97,8 +102,10 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 
         finaldataset.add(linedataset)
-        val data = LineData(xvalueTime, finaldataset as List<ILineDataSet>)
+        val data = LineData(finaldataset as List<ILineDataSet>)
         binding.lineChart.data = data
+
+        binding.lineChart.xAxis.valueFormatter = XAxisTimeFormatterTwo()
 
         styleChart(binding.lineChart)
     }
@@ -153,10 +160,14 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         setDrawHighlightIndicators(false)
         setDrawCircles(false)
 
-        setDrawCubic(true)
-
         setDrawFilled(true)
         fillDrawable = binding.root.resources.getDrawable(R.drawable.bg_shadow_graph_line_gold)
 
+    }
+
+    class XAxisTimeFormatterTwo: ValueFormatter() {
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            return SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(value.toLong()))
+        }
     }
 }

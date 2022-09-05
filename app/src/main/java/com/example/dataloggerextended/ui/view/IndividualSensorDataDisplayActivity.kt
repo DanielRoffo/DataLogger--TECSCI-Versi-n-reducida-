@@ -1,9 +1,11 @@
 package com.example.dataloggerextended.ui.view
 
+import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dataloggerextended.R
@@ -13,14 +15,22 @@ import com.example.dataloggerextended.model.SensorData
 import com.example.dataloggerextended.ui.viewmodel.IndividualSensorViewModel
 import com.example.dataloggerextended.utils.ScreenState
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import java.sql.Date
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class IndividualSensorDataDisplayActivity : AppCompatActivity() {
 
@@ -35,7 +45,7 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var binding: ActivityIndividualSensorDataDisplayBinding
-    val simpleDateFormated = SimpleDateFormat("HH:mm")
+    val simpleDateFormated = SimpleDateFormat("dd/MM/yy || HH:mm:ss")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,24 +87,28 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
                 binding.viewLoading2.visibility = View.VISIBLE
             }
             is ScreenState.Success -> {
+
+                var indexValues = mutableListOf<Float>()
                 var xvalueTime = ArrayList<String>()
-                var yvalue = ArrayList<Entry>()
+                var yvalue = mutableListOf<Entry>()
                 var organizedList = state.data?.sortedByDescending { it?.time }
                 if (organizedList != null) {
                     myAdapter?.setData(organizedList)
                 }
                 organizedList = state.data?.sortedBy { it?.time }
-                organizedList?.forEachIndexed { index, it ->
+                var xOld = Timestamp(System.currentTimeMillis()).time
+                organizedList?.forEach() {it ->
                     //Formateo el tiempo
 
-                    val timestamp = it?.time
+                    val timestamp = it?.time!!.time
                     var dateToString = simpleDateFormated.format(timestamp)
+                    val index = timestamp.toFloat()
 
-                    yvalue.add(Entry(it?.sensorVal.toString().toFloat(), index))
-                    xvalueTime.add(dateToString)
+                    yvalue.add(Entry(index, it?.sensorVal.toString().toFloat()))
+
 
                 }
-                setLineChartData(xvalueTime, yvalue)
+                setLineChartData(yvalue)
                 binding.viewLoading1.visibility = View.GONE
                 binding.viewLoading2.visibility = View.GONE
                 binding.lineChart.visibility = View.VISIBLE
@@ -127,7 +141,7 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
     }
 
     //Inicializo el Linear Chart
-    private fun setLineChartData(xvalueTime: ArrayList<String>, entry: List<Entry>) {
+    private fun setLineChartData(entry: List<Entry>) {
 
 
         val linedataset = LineDataSet(entry, "value")
@@ -138,8 +152,26 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
 
 
         finaldataset.add(linedataset)
-        val data = LineData(xvalueTime, finaldataset as List<ILineDataSet>)
+        val data = LineData(finaldataset as List<ILineDataSet>)
         binding.lineChart.data = data
+
+        binding.lineChart.xAxis.valueFormatter = XAxisTimeFormatter()
+
+        binding.lineChart.marker = object : MarkerView(this, R.layout.custom_marker_view) {
+            override fun refreshContent(e: Entry, highlight: Highlight) {
+                (findViewById<View>(R.id.tvContent) as TextView).text = "${e.y} at ${simpleDateFormated.format(e.x)}"
+            }
+
+            override fun draw(canvas: Canvas, posX: Float, posY: Float) {
+                if (posX > canvas.width / 2.0) //Check if the user is in the right half of the canvas
+                    super.draw(
+                        canvas,
+                        100f,
+                        50f
+                    ) else  //Otherwise draw the marker on the top right corner.
+                    super.draw(canvas, 100f, 50f)
+            }
+        }
 
         styleChart(binding.lineChart)
     }
@@ -150,14 +182,13 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
         setTouchEnabled(true)
         isDragEnabled = true
         setScaleEnabled(true)
-        setPinchZoom(true)
 
         setDescription(null)
         legend.isEnabled = false
         setNoDataText("Sensor not initialize")
         setDrawGridBackground(false)
         setDrawBorders(false)
-        setMaxVisibleValueCount(10)
+
 
         setBackgroundColor(binding.root.resources.getColor(R.color.light_black))
         xAxis.setTextColor(binding.root.resources.getColor(R.color.gold))
@@ -176,8 +207,6 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
         axisLeft.mAxisMinimum = 0f
         axisLeft.mAxisMaximum = 10f
 
-        xAxis.mAxisMinimum = 0f
-        xAxis.mAxisMaximum = 24f
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(false)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -192,14 +221,19 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
         lineWidth = 4f
         isHighlightEnabled = true
         setDrawHighlightIndicators(true)
-        setDrawCircles(false)
+        setDrawCircles(true)
         setCircleColor(binding.root.resources.getColor(R.color.gold))
-
-        setDrawCubic(false)
 
         setDrawFilled(true)
         fillDrawable = binding.root.resources.getDrawable(R.drawable.bg_shadow_graph_line_gold)
 
     }
+
+    class XAxisTimeFormatter: ValueFormatter() {
+        override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+            return SimpleDateFormat("dd/MM || HH:mm", Locale.getDefault()).format(Date(value.toLong()))
+        }
+    }
+
 
 }
