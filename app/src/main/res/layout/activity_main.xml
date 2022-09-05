@@ -13,25 +13,48 @@
         android:layout_height="match_parent"
         android:id="@+id/drawerLayout">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                app:tabTextColor="@color/white"
-                app:tabSelectedTextColor="@color/gold"
-                android:background="@color/light_black"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sensorRv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/view_pager_2"
+            <com.facebook.shimmer.ShimmerFrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                app:shimmer_auto_start="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/viewLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <include layout="@layout/main_device_card_loading"/>
+                    <include layout="@layout/main_device_card_loading"/>
+                    <include layout="@layout/main_device_card_loading"/>
+                    <include layout="@layout/main_device_card_loading"/>
+                    <include layout="@layout/main_device_card_loading"/>
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"

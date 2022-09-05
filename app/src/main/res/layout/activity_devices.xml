@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/light_black"
+    android:orientation="vertical"
+    tools:context=".ui.view.DevicesActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/devices_id_rv"
+        android:layout_marginVertical="20dp"
+        android:layout_height="0dp"
+        android:layout_weight="35"
+        android:layout_width="match_parent"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/lighter_black"
+            app:hintTextColor="@color/white"
+            android:textColorHint="@color/white"
+            android:layout_marginBottom="10dp"
+            android:hint="Enter Device ID">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDeviceId"
+                android:textColor="@color/white"
+                android:paddingTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/lighter_black"
+            app:hintTextColor="@color/white"
+            android:textColorHint="@color/white"
+            android:layout_marginBottom="10dp"
+            android:hint="Enter Device Code">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDeviceCode"
+                android:textColor="@color/white"
+                android:inputType="textPassword"
+                android:paddingTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addNewDevice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/lighter_black"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:visibility="visible"
+            app:icon="@drawable/ic_baseline_add_24"
+            app:iconPadding="-20dp"
+            android:gravity="center"
+            app:iconSize="40dp"
+            app:iconTint="@color/gold"
+            android:text="ADD NEW DEVICE">
+
+
+        </com.google.android.material.button.MaterialButton>
+
+        <LinearLayout
+            android:id="@+id/addNewDeviceSubOption"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addNewDeviceSubOptionSave"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/lighter_black"
+                android:gravity="center"
+                android:text="ADD NEW DEVICE"/>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addNewDeviceSubOptionCancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/lighter_black"
+                android:gravity="center"
+                android:text="ADD NEW DEVICE"/>
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

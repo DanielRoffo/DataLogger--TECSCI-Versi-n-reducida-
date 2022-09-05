@@ -13,7 +13,8 @@
     <color name="light_black_transparent">#66151515</color>
     <color name="tecsci_color">#66ccd1</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gold">#F8A629</color>
+    <color name="gold">#66ccd1</color>
+    <color name="gold2">#F8A629</color>
     <color name="blue">#003F5C</color>
     <color name="purple">#472B62</color>
     <color name="pink">#BC4873</color>
