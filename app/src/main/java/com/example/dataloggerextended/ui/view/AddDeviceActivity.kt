@@ -24,6 +24,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.sql.Struct
 
 class AddDeviceActivity : AppCompatActivity() {
 
@@ -71,19 +72,42 @@ class AddDeviceActivity : AppCompatActivity() {
 
     private fun adaptUiForDeviceModel(model : String?){
         if (model == "esp32/h/t"){
+            binding.colors.visibility = View.GONE
             binding.etVoltName.visibility = View.GONE
             binding.etSwitchName.visibility = View.GONE
+        }
+        if (model == "Lebym-Do"){
+            binding.colors.visibility = View.GONE
+            binding.etVoltName.visibility = View.GONE
+            binding.etSwitchName.visibility = View.GONE
+            binding.etTempName.visibility = View.GONE
+            binding.etHumName.visibility = View.GONE
         }
     }
 
     private fun addNewDeviceOnFirebase(model: String?, device: String?){
         if (checkIfNotEmpty(model)){
-            val docData =hashMapOf(
-                "devName" to binding.etDeviceName.text.toString(),
-                "devHum" to binding.etHumName.text.toString(),
-                "devTemp" to binding.etTempName.text.toString(),
-                "lineColor" to binding.lnColorSelectedTop.background.toString(),
-                "textColor" to binding.txColorSelectedTop.background.toString())
+            var docData = hashMapOf<String, String>()
+            if (model == "esp32/h/t"){
+                docData =hashMapOf(
+                    "devName" to binding.etDeviceName.text.toString(),
+                    "devHum" to binding.etHumName.text.toString(),
+                    "devTemp" to binding.etTempName.text.toString())
+            }
+
+            if (model == "Lebym-Do"){
+                docData =hashMapOf(
+                    "devName" to binding.etDeviceName.text.toString(),
+                    "temp-TRD1" to "Temp - TRD1 ",
+                    "temp-TRD2" to "Temp - TRD2",
+                    "temp-TRD3" to "Temp - TRD3",
+                    "temp -BME" to "Temp - BME",
+                    "hum-BME" to "Hum - BME",
+                    "press-BME" to "Press - BME",
+                    "error-motor1" to "Error - motor1",
+                    "error-motor2" to "Error - motor2",
+                    "door_is_open" to "Door is open")
+            }
 
             dbDevices.document(firebaseAuth.currentUser!!.email!!).collection("linked_devices").document(device!!).set(docData)
                 .addOnSuccessListener {
@@ -102,11 +126,14 @@ class AddDeviceActivity : AppCompatActivity() {
             val devName = binding.etDeviceName.text.toString()
             val devHum = binding.etHumName.text.toString()
             val devTemp = binding.etTempName.text.toString()
-            val lineColor = binding.lnColorSelectedTop.background.toString()
-            val textColor = binding.txColorSelectedTop.background.toString()
-            if (devHum.isNotEmpty() && devTemp.isNotEmpty() && devName.isNotEmpty()
-                && lineColor != "android.graphics.drawable.ColorDrawable@9faff0"
-                && textColor != "android.graphics.drawable.ColorDrawable@9faff0"){
+            if (devHum.isNotEmpty() && devTemp.isNotEmpty() && devName.isNotEmpty()){
+                return true
+            }
+        }
+
+        if (model == "Lebym-Do"){
+            val devName = binding.etDeviceName.text.toString()
+            if (devName.isNotEmpty()){
                 return true
             }
         }
