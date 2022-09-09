@@ -1,6 +1,9 @@
 package com.example.dataloggerextended.ui.viewmodel
 
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -94,17 +97,40 @@ class MainViewModel() : ViewModel() {
 
                         documents.forEach { it ->
                             //creo el DeviceData donde se va a ir guardando la info
+
                             val deviceData = it.toObject(DeviceData::class.java)
+
                             if (deviceData != null) {
                                 //por cada item del documento
                                 it.data?.forEach {
                                     //carga los datos de cada titulo del documento dentro del DeviceData
                                     when (it.key) {
                                         "hum1" -> {
-                                            deviceData?.hum = it.value.toString()
+                                            deviceData?.hum1 = it.value.toString()
+                                        }
+                                        "hum2" -> {
+                                            deviceData?.hum2 = it.value.toString()
+                                        }
+                                        "hum3" -> {
+                                            deviceData?.hum3 = it.value.toString()
                                         }
                                         "temp1" -> {
-                                            deviceData?.temp = it.value.toString()
+                                            deviceData?.temp1 = it.value.toString()
+                                        }
+                                        "temp2" -> {
+                                            deviceData?.temp2 = it.value.toString()
+                                        }
+                                        "temp3" -> {
+                                            deviceData?.temp3 = it.value.toString()
+                                        }
+                                        "switch1" -> {
+                                            deviceData?.switch1 = it.value.toString()
+                                        }
+                                        "switch2" -> {
+                                            deviceData?.switch2 = it.value.toString()
+                                        }
+                                        "switch3" -> {
+                                            deviceData?.switch3 = it.value.toString()
                                         }
                                         "timestamp" -> {
                                             val formatter  = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
@@ -126,10 +152,24 @@ class MainViewModel() : ViewModel() {
                                 if (myDevice == null) {
                                     allDataFromDevice.add(deviceData)
                                 } else {
-                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.hum =
-                                        deviceData.hum
-                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.temp =
-                                        deviceData.temp
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.hum1 =
+                                        deviceData.hum1
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.hum2 =
+                                        deviceData.hum2
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.hum3 =
+                                        deviceData.hum3
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.temp1 =
+                                        deviceData.temp1
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.temp2 =
+                                        deviceData.temp2
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.temp3 =
+                                        deviceData.temp3
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.switch1 =
+                                        deviceData.switch1
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.switch2 =
+                                        deviceData.switch2
+                                    allDataFromDevice.find { it.id == deviceData?.id && it.deviceId == device.device }?.switch3 =
+                                        deviceData.switch3
                                 }
 
 

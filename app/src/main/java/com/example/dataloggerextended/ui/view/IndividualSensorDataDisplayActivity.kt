@@ -54,6 +54,7 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
         val data = intent.getSerializableExtra("data")
         var dataAsArray = data as ArrayList<String>
 
+
         // Cambiar el color del SupportActionBar
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.light_black)))
 
@@ -88,9 +89,8 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
             }
             is ScreenState.Success -> {
 
-                var indexValues = mutableListOf<Float>()
-                var xvalueTime = ArrayList<String>()
                 var yvalue = mutableListOf<Entry>()
+                var isStepped: Boolean = false
                 var organizedList = state.data?.sortedByDescending { it?.time }
                 if (organizedList != null) {
                     myAdapter?.setData(organizedList)
@@ -104,11 +104,22 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
                     var dateToString = simpleDateFormated.format(timestamp)
                     val index = timestamp.toFloat()
 
-                    yvalue.add(Entry(index, it?.sensorVal.toString().toFloat()))
+                    if (it?.sensorVal == "true" || it?.sensorVal == "false"){
+                        if (it?.sensorVal == "true"){
+                            yvalue.add(Entry(index, 1F))
+                        }else{
+                            yvalue.add(Entry(index, 0F))
+                        }
+                        isStepped = true
+
+                    }else{
+                        yvalue.add(Entry(index, it?.sensorVal.toString().toFloat()))
+                    }
+
 
 
                 }
-                setLineChartData(yvalue)
+                setLineChartData(yvalue, isStepped)
                 binding.viewLoading1.visibility = View.GONE
                 binding.viewLoading2.visibility = View.GONE
                 binding.lineChart.visibility = View.VISIBLE
@@ -141,12 +152,12 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
     }
 
     //Inicializo el Linear Chart
-    private fun setLineChartData(entry: List<Entry>) {
+    private fun setLineChartData(entry: List<Entry>, isStepped: Boolean) {
 
 
         val linedataset = LineDataSet(entry, "value")
 
-        styleLineDataSet(linedataset)
+        styleLineDataSet(linedataset, isStepped)
 
         val finaldataset = ArrayList<LineDataSet>()
 
@@ -214,7 +225,7 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
     }
 
     //Configuro la linea del Chart
-    private fun styleLineDataSet(lineDataSet: LineDataSet) = lineDataSet.apply {
+    private fun styleLineDataSet(lineDataSet: LineDataSet, isStepped: Boolean) = lineDataSet.apply {
         color = binding.root.resources.getColor(R.color.gold)
         valueTextColor = binding.root.resources.getColor(R.color.gold)
         setDrawValues(false)
@@ -223,6 +234,10 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
         setDrawHighlightIndicators(true)
         setDrawCircles(true)
         setCircleColor(binding.root.resources.getColor(R.color.gold))
+
+        if (isStepped){
+            mode = LineDataSet.Mode.STEPPED
+        }
 
         setDrawFilled(true)
         fillDrawable = binding.root.resources.getDrawable(R.drawable.bg_shadow_graph_line_gold)

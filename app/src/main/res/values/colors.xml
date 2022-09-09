@@ -19,9 +19,9 @@
     <color name="purple">#472B62</color>
     <color name="pink">#BC4873</color>
     <color name="peach">#FB5B5A</color>
-    <color name="green">#7DCE13</color>
     <color name="neon_purple">#5800FF</color>
     <color name="orange">#F66B0E</color>
     <color name="green_selected">#91FF00</color>
-    <color name="red">#E22928</color>
+    <color name="green">#84DC87</color>
+    <color name="red">#FD9271</color>
 </resources>

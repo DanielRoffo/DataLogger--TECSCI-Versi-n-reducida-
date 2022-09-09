@@ -14,7 +14,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dataloggerextended.NotificationsActivity
 import com.example.dataloggerextended.R
 import com.example.dataloggerextended.adapters.mainFragment.devices.DevicesAdapter
 import com.example.dataloggerextended.databinding.ActivityMainBinding
@@ -104,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                     this.startActivity(intent)
                 }
                 R.id.nav_config -> {
-                    val intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this, ConfigurationActivity::class.java)
                     this.startActivity(intent)
                 }
                 R.id.nav_logout -> {
@@ -166,6 +165,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Activa o desactiva las vistas de loading dependiendo del estado de los datos recibidos
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun processDevicesDataResponse(state: ScreenState<List<DeviceData?>>) {
         when (state) {
             is ScreenState.Loading -> {
@@ -192,6 +192,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun reorganizeData(dataList: List<DeviceData?>?): MutableList<List<List<DeviceData>>> {
 
         val listOfList = mutableListOf<List<DeviceData>>()
@@ -202,29 +203,93 @@ class MainActivity : AppCompatActivity() {
             //Organizo cada documento de cada dispositivo, separo la info de cada DeviceData y la guardo en un List
             for (sensor in dataList) {
 
-                val addSensorHum: DeviceData = DeviceData()
-                val addSensorTemp: DeviceData = DeviceData()
+
+                val addSensorHum1: DeviceData = DeviceData()
+                val addSensorHum2: DeviceData = DeviceData()
+                val addSensorHum3: DeviceData = DeviceData()
+                val addSensorTemp1: DeviceData = DeviceData()
+                val addSensorTemp2: DeviceData = DeviceData()
+                val addSensorTemp3: DeviceData = DeviceData()
+                val addSensorSwitch1: DeviceData = DeviceData()
+                val addSensorSwitch2: DeviceData = DeviceData()
+                val addSensorSwitch3: DeviceData = DeviceData()
 
 
-                if (sensor?.hum != null) {
-                    addSensorHum.deviceId = sensor.deviceId
-                    addSensorHum.id = sensor.id
-                    addSensorHum.time = sensor.time
-                    addSensorHum.hum = sensor.hum
-                    addSensorHum.temp = null
+                if (sensor?.hum1 != null) {
+                    addSensorHum1.deviceId = sensor.deviceId
+                    addSensorHum1.id = sensor.id
+                    addSensorHum1.time = sensor.time
+                    addSensorHum1.hum1 = sensor.hum1
+
+                }
+
+                if (sensor?.hum2 != null) {
+                    addSensorHum2.deviceId = sensor.deviceId
+                    addSensorHum2.id = sensor.id
+                    addSensorHum2.time = sensor.time
+                    addSensorHum2.hum2 = sensor.hum2
 
                 }
 
-                if (sensor?.temp != null) {
-                    addSensorTemp.deviceId = sensor.deviceId
-                    addSensorTemp.id = sensor.id
-                    addSensorTemp.time = sensor.time
-                    addSensorTemp.hum = null
-                    addSensorTemp.temp = sensor.temp
+                if (sensor?.hum3 != null) {
+                    addSensorHum3.deviceId = sensor.deviceId
+                    addSensorHum3.id = sensor.id
+                    addSensorHum3.time = sensor.time
+                    addSensorHum3.hum3 = sensor.hum3
 
                 }
-                mutableList.add(addSensorHum)
-                mutableList.add(addSensorTemp)
+
+                if (sensor?.temp1 != null) {
+                    addSensorTemp1.deviceId = sensor.deviceId
+                    addSensorTemp1.id = sensor.id
+                    addSensorTemp1.time = sensor.time
+                    addSensorTemp1.temp1 = sensor.temp1
+                }
+
+                if (sensor?.temp2 != null) {
+                    addSensorTemp2.deviceId = sensor.deviceId
+                    addSensorTemp2.id = sensor.id
+                    addSensorTemp2.time = sensor.time
+                    addSensorTemp2.temp2 = sensor.temp2
+                }
+
+                if (sensor?.temp3 != null) {
+                    addSensorTemp3.deviceId = sensor.deviceId
+                    addSensorTemp3.id = sensor.id
+                    addSensorTemp3.time = sensor.time
+                    addSensorTemp3.temp3 = sensor.temp3
+                }
+
+                if (sensor?.switch1 != null) {
+                    addSensorSwitch1.deviceId = sensor.deviceId
+                    addSensorSwitch1.id = sensor.id
+                    addSensorSwitch1.time = sensor.time
+                    addSensorSwitch1.switch1 = sensor.switch1
+                }
+
+                if (sensor?.switch2 != null) {
+                    addSensorSwitch2.deviceId = sensor.deviceId
+                    addSensorSwitch2.id = sensor.id
+                    addSensorSwitch2.time = sensor.time
+                    addSensorSwitch2.switch2 = sensor.switch2
+                }
+
+                if (sensor?.switch3 != null) {
+                    addSensorSwitch3.deviceId = sensor.deviceId
+                    addSensorSwitch3.id = sensor.id
+                    addSensorSwitch3.time = sensor.time
+                    addSensorSwitch3.switch3 = sensor.switch3
+                }
+
+                mutableList.add(addSensorHum1)
+                mutableList.add(addSensorHum2)
+                mutableList.add(addSensorHum3)
+                mutableList.add(addSensorTemp1)
+                mutableList.add(addSensorTemp2)
+                mutableList.add(addSensorTemp3)
+                mutableList.add(addSensorSwitch1)
+                mutableList.add(addSensorSwitch2)
+                mutableList.add(addSensorSwitch3)
 
             }
             //En el listado final quedan todos los DeviceData de cada sensor
@@ -237,21 +302,57 @@ class MainActivity : AppCompatActivity() {
 
             for (devices in mapDevices.values) {
 
-                val humDocumentList = mutableListOf<DeviceData>()
-                val tempDocumentList = mutableListOf<DeviceData>()
+                val humDocumentList1 = mutableListOf<DeviceData>()
+                val humDocumentList2 = mutableListOf<DeviceData>()
+                val humDocumentList3 = mutableListOf<DeviceData>()
+                val tempDocumentList1 = mutableListOf<DeviceData>()
+                val tempDocumentList2 = mutableListOf<DeviceData>()
+                val tempDocumentList3 = mutableListOf<DeviceData>()
+                val switchDocumentList1 = mutableListOf<DeviceData>()
+                val switchDocumentList2 = mutableListOf<DeviceData>()
+                val switchDocumentList3 = mutableListOf<DeviceData>()
 
                 for (documents in devices.indices) {
 
-                    if (devices[documents].hum != null) {
+                    if (devices[documents].hum1 != null) {
 
-                        humDocumentList.add(devices[documents])
+                        humDocumentList1.add(devices[documents])
                     }
-                    if (devices[documents].temp != null) {
-                        tempDocumentList.add(devices[documents])
+                    if (devices[documents].hum2 != null) {
+
+                        humDocumentList2.add(devices[documents])
+                    }
+                    if (devices[documents].hum3 != null) {
+
+                        humDocumentList3.add(devices[documents])
+                    }
+                    if (devices[documents].temp1 != null) {
+                        tempDocumentList1.add(devices[documents])
+                    }
+                    if (devices[documents].temp2 != null) {
+                        tempDocumentList2.add(devices[documents])
+                    }
+                    if (devices[documents].temp3 != null) {
+                        tempDocumentList3.add(devices[documents])
+                    }
+                    if (devices[documents].switch1 != null) {
+                        switchDocumentList1.add(devices[documents])
+                    }
+                    if (devices[documents].switch2 != null) {
+                        switchDocumentList2.add(devices[documents])
+                    }
+                    if (devices[documents].switch3 != null) {
+                        switchDocumentList3.add(devices[documents])
                     }
                 }
-                val tempListOfSensors = listOf(humDocumentList, tempDocumentList)
-                deviceList.add(tempListOfSensors)
+                val tempListOfSensors = mutableListOf(humDocumentList1, humDocumentList2, humDocumentList3, tempDocumentList1, tempDocumentList2,
+                tempDocumentList3, switchDocumentList1, switchDocumentList2, switchDocumentList3)
+                tempListOfSensors.removeIf{it == emptyList<DeviceData>()}
+
+                if (!tempListOfSensors.isEmpty()){
+                    deviceList.add(tempListOfSensors)
+                }
+
             }
         }
         return deviceList

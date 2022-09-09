@@ -1,5 +1,8 @@
 package com.example.dataloggerextended.adapters.mainFragment.sensors
 
+import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,7 @@ class SensorsAdapter(private var sensorList: List<List<DeviceData?>?>?, private 
     // La fun recibe la instancia del viewHolder y la posiscion en la que estamos.
     override fun onBindViewHolder(holder: SensorViewHolder, position: Int) {
         val item = sensorList?.get(position)
+
         if (item != null) {
             holder.render(item, onClickListener)
         }

@@ -2,6 +2,7 @@ package com.example.dataloggerextended.ui.view
 
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,13 @@ class DevicesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_devices)
+
+        // Cambiar el color del SupportActionBar
+        supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.light_black)))
+        supportActionBar!!.title = "Your Devices"
+
+        //Agrego un boton de regreso al MainActivity y cambio el titulo del action bar
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         binding = ActivityDevicesBinding.inflate(layoutInflater)
         setContentView(binding.root)

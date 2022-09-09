@@ -21,10 +21,10 @@ class MydiffUtil(
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return when{
-            oldList[oldItemPosition]?.forEach { it?.forEach { it?.hum } } == newList[newItemPosition]?.forEach { it?.forEach { it?.hum } } -> {
+            oldList[oldItemPosition]?.forEach { it?.forEach { it?.hum1 } } == newList[newItemPosition]?.forEach { it?.forEach { it?.hum1 } } -> {
                 false
             }
-            oldList[oldItemPosition]?.forEach { it?.forEach { it?.temp } } == newList[newItemPosition]?.forEach { it?.forEach { it?.temp } } -> {
+            oldList[oldItemPosition]?.forEach { it?.forEach { it?.temp1 } } == newList[newItemPosition]?.forEach { it?.forEach { it?.temp1 } } -> {
                 false
             }
             oldList[oldItemPosition]?.forEach { it?.forEach { it?.time } } == newList[newItemPosition]?.forEach { it?.forEach { it?.time } } -> {
