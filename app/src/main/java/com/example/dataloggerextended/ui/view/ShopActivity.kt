@@ -19,7 +19,7 @@ class ShopActivity : AppCompatActivity() {
 
         // Cambiar el color del SupportActionBar
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.light_black)))
-        supportActionBar!!.title = "Shop"
+        supportActionBar!!.title = "TECSCI - Online Shop"
 
         //Agrego un boton de regreso al MainActivity y cambio el titulo del action bar
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)

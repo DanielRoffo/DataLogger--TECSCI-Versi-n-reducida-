@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dataloggerextended.R
+import com.example.dataloggerextended.ScannerAddDeviceActivity
 import com.example.dataloggerextended.adapters.userDevices.UserDevicesAdapter
 import com.example.dataloggerextended.databinding.ActivityDevicesBinding
 import com.example.dataloggerextended.model.UserDevice
@@ -129,6 +130,11 @@ class DevicesActivity : AppCompatActivity() {
                 Toast.makeText(this, "Ups, something is missing. Complete all the fields and try again!", Toast.LENGTH_SHORT).show()
             }
 
+        }
+
+        binding.scanNewDevice.setOnClickListener {
+            val intent = Intent(this, ScannerAddDeviceActivity::class.java)
+            startActivity(intent)
         }
 
     }
