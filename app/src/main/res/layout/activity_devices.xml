@@ -8,59 +8,89 @@
     android:orientation="vertical"
     tools:context=".ui.view.DevicesActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/devices_id_rv"
-        android:layout_marginVertical="20dp"
-        android:layout_height="0dp"
-        android:layout_weight="75"
-        android:layout_width="match_parent"/>
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/drawerLayout">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="25"
-        android:visibility="visible"
-        android:gravity="center"
-        android:layout_marginHorizontal="20dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addNewDevice"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/devices_id_rv"
+            android:layout_marginVertical="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="75"
+            android:layout_width="match_parent"/>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/lighter_black"
+            android:layout_weight="25"
             android:visibility="visible"
-            app:icon="@drawable/ic_baseline_add_24"
-            app:iconPadding="-20dp"
             android:gravity="center"
-            app:iconSize="40dp"
-            app:iconTint="@color/gold"
-            android:text="ADD NEW DEVICE">
+            android:layout_marginHorizontal="20dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addNewDevice"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/lighter_black"
+                android:visibility="visible"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconPadding="-20dp"
+                android:gravity="center"
+                app:iconSize="40dp"
+                app:iconTint="@color/gold"
+                android:text="ADD NEW DEVICE">
 
 
-        </com.google.android.material.button.MaterialButton>
+            </com.google.android.material.button.MaterialButton>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/scanNewDevice"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/lighter_black"
-            android:visibility="visible"
-            app:icon="@drawable/ic_baseline_add_24"
-            app:iconPadding="-20dp"
-            android:gravity="center"
-            app:iconSize="40dp"
-            app:iconTint="@color/gold"
-            android:text="SCAN NEW DEVICE">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/scanNewDevice"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/lighter_black"
+                android:visibility="visible"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:iconPadding="-20dp"
+                android:gravity="center"
+                app:iconSize="40dp"
+                app:iconTint="@color/gold"
+                android:text="SCAN NEW DEVICE">
 
 
-        </com.google.android.material.button.MaterialButton>
+            </com.google.android.material.button.MaterialButton>
 
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:itemTextColor="@color/white"
+            app:itemIconTint="@color/gold"
+            app:subheaderColor="@android:color/darker_gray"
+            android:backgroundTint="@color/light_black"
+            android:background="@color/light_black"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header"
+            app:menu="@menu/nav_menu"/>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 
 

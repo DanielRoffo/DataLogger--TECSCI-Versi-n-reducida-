@@ -6,9 +6,13 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dataloggerextended.R
@@ -17,6 +21,7 @@ import com.example.dataloggerextended.databinding.ActivityDevicesBinding
 import com.example.dataloggerextended.model.UserDevice
 import com.example.dataloggerextended.ui.viewmodel.MainViewModel
 import com.example.dataloggerextended.utils.ScreenState
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -32,6 +37,7 @@ class DevicesActivity : AppCompatActivity() {
     private val dbDevices = Firebase.firestore.collection("devices")
     private val dbDevicesUsers = Firebase.firestore.collection("users")
     private val myAdapter by lazy { UserDevicesAdapter(emptyList<UserDevice>()) }
+    lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +68,74 @@ class DevicesActivity : AppCompatActivity() {
         addNewDevice()
 
 
+        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val navView: NavigationView = binding.navView
+
+        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        navView.setNavigationItemSelectedListener {
+
+            when (it.itemId) {
+
+                R.id.nav_home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    this.startActivity(intent)
+                }
+                R.id.nav_devices -> {
+                    val intent = Intent(this, DevicesActivity::class.java)
+                    this.startActivity(intent)
+                }
+                R.id.nav_notifications -> {
+                    val intent = Intent(this, NotificationsActivity::class.java)
+                    this.startActivity(intent)
+                }
+                R.id.nav_shop -> {
+                    val intent = Intent(this, ShopActivity::class.java)
+                    this.startActivity(intent)
+                }
+                R.id.nav_config -> {
+                    val intent = Intent(this, ConfigurationActivity::class.java)
+                    this.startActivity(intent)
+                }
+                R.id.nav_logout -> {
+                    firebaseAuth.signOut()
+                    val intent = Intent(this, SignInActivity::class.java)
+                    this.startActivity(intent)
+                }
+                R.id.nav_share -> Toast.makeText(
+                    applicationContext,
+                    "Clicked Share",
+                    Toast.LENGTH_SHORT
+                ).show()
+                R.id.nav_rate_us -> Toast.makeText(
+                    applicationContext,
+                    "Clicked Rate Us",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
+
+            true
+        }
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (toggle.onOptionsItemSelected(item)) {
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun processDevicesResponse(state: ScreenState<List<UserDevice?>>) {

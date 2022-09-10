@@ -4,12 +4,6 @@
 
 
     <item
-        android:id="@+id/wifi"
-        android:icon="@drawable/ic_baseline_wifi_24"
-        android:title="Wifi"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/config"
         android:icon="@drawable/ic_baseline_info_24"
         android:title="Configurations"
