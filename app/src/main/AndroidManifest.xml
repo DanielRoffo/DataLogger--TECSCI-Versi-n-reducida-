@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DataLogger">
         <activity
-            android:name=".ScannerAddDeviceActivity"
+            android:name=".ui.view.ScannerAddDeviceActivity"
             android:exported="true"
             android:parentActivityName=".ui.view.DevicesActivity"/>
         <activity

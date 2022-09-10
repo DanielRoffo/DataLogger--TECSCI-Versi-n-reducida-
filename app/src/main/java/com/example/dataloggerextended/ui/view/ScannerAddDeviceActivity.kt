@@ -1,4 +1,4 @@
-package com.example.dataloggerextended
+package com.example.dataloggerextended.ui.view
 
 import android.Manifest
 import android.content.ContentValues
@@ -17,10 +17,8 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
-import com.example.dataloggerextended.databinding.ActivityDevicesBinding
+import com.example.dataloggerextended.R
 import com.example.dataloggerextended.databinding.ActivityScannerAddDeviceBinding
-import com.example.dataloggerextended.ui.view.AddDeviceActivity
-import com.example.dataloggerextended.ui.view.DevicesActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

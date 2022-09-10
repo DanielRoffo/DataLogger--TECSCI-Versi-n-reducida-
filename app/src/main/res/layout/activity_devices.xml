@@ -12,58 +12,24 @@
         android:id="@+id/devices_id_rv"
         android:layout_marginVertical="20dp"
         android:layout_height="0dp"
-        android:layout_weight="35"
+        android:layout_weight="75"
         android:layout_width="match_parent"/>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_weight="25"
         android:visibility="visible"
+        android:gravity="center"
         android:layout_marginHorizontal="20dp"
         android:orientation="vertical">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/lighter_black"
-            app:hintTextColor="@color/white"
-            android:textColorHint="@color/white"
-            android:layout_marginBottom="10dp"
-            android:hint="Enter Device ID">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDeviceId"
-                android:textColor="@color/white"
-                android:paddingTop="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/lighter_black"
-            app:hintTextColor="@color/white"
-            android:textColorHint="@color/white"
-            android:hint="Enter Device Code">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDeviceCode"
-                android:textColor="@color/white"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addNewDevice"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/lighter_black"
             android:visibility="visible"
             app:icon="@drawable/ic_baseline_add_24"
@@ -79,7 +45,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/scanNewDevice"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:backgroundTint="@color/lighter_black"
             android:visibility="visible"
             app:icon="@drawable/ic_baseline_add_24"

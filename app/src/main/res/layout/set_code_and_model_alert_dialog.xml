@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/light_black">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Enter device id and code"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textSize="20sp"
+            android:layout_margin="5dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/lighter_black"
+            app:hintTextColor="@color/white"
+            android:textColorHint="@color/white"
+            android:layout_marginBottom="10dp"
+            android:hint="Enter Device ID">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDeviceId"
+                android:textColor="@color/white"
+                android:paddingTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/lighter_black"
+            app:hintTextColor="@color/white"
+            android:textColorHint="@color/white"
+            android:hint="Enter Device Code">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDeviceCode"
+                android:textColor="@color/white"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnAcceptDialog"
+                android:layout_width="0dp"
+                android:layout_weight="50"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_buttom"
+                android:text="Add"
+                android:textColor="@color/white"
+                android:layout_marginEnd="20dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCancelDialog"
+                android:layout_width="0dp"
+                android:layout_weight="50"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_buttom"
+
+                android:text="Cancel"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
