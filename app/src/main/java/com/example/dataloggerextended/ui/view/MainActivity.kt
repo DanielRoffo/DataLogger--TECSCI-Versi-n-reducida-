@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
                     this.startActivity(intent)
                 }
                 R.id.nav_shop -> {
-                    val intent = Intent(this, MainActivity::class.java)
+                    val intent = Intent(this, ShopActivity::class.java)
                     this.startActivity(intent)
                 }
                 R.id.nav_config -> {
