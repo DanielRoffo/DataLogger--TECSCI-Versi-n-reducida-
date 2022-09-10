@@ -26,6 +26,8 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.sql.Date
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
@@ -44,6 +46,7 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
     }
 
     private lateinit var firebaseAuth: FirebaseAuth
+    private val dbUsers = Firebase.firestore.collection("users")
     private lateinit var binding: ActivityIndividualSensorDataDisplayBinding
     val simpleDateFormated = SimpleDateFormat("dd/MM/yy || HH:mm:ss")
 
@@ -51,16 +54,24 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_individual_sensor_data_display)
 
+        // Initialize Firebase Auth
+        firebaseAuth = FirebaseAuth.getInstance()
+
         val data = intent.getSerializableExtra("data")
         var dataAsArray = data as ArrayList<String>
-
 
         // Cambiar el color del SupportActionBar
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.light_black)))
 
         //Agrego un boton de regreso al MainActivity y cambio el titulo del action bar
+
+        dbUsers.document(firebaseAuth.currentUser?.email!!)
+            .collection("linked_devices")
+            .document(dataAsArray[0]).get().addOnSuccessListener {
+                supportActionBar!!.title = "${it["devName"]} - ${it[dataAsArray[1]]}"
+            }
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.title = "${dataAsArray[0]} - ${dataAsArray[1]}"
+
 
         binding = ActivityIndividualSensorDataDisplayBinding.inflate(layoutInflater)
         setContentView(binding.root)

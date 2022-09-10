@@ -18,6 +18,9 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,15 +29,19 @@ import kotlin.collections.ArrayList
 // El ViewHolder sera llamado con cada uno de los items del listado
 class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+    private lateinit var firebaseAuth: FirebaseAuth
+    private val dbUsers = Firebase.firestore.collection("users")
     val binding = MainDeviceCardRvBinding.bind(view)
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat", "ResourceAsColor")
     fun render(sensorModel: List<DeviceData?>, onClickListener: (List<DeviceData?>) -> Unit) {
 
+        // Initialize Firebase Auth
+        firebaseAuth = FirebaseAuth.getInstance()
 
 
         // Ordeno los listados de los sensores por Dia y Hora
-        var listanueva = sensorModel.sortedBy { it?.time }
+        val listanueva = sensorModel.sortedBy { it?.time }
 
         setValuesOnRecyclerView(listanueva)
 
@@ -139,6 +146,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             var hum1Entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
 
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("hum1").toString()
+                }
+
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.hum1?.toFloat()} %"
             binding.sensorType.text = "Humidity"
@@ -163,6 +176,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             var hum1Entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
 
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("hum2").toString()
+                }
+
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.hum2?.toFloat()} %"
             binding.sensorType.text = "Humidity"
@@ -186,6 +205,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
             var hum1Entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
+
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("hum3").toString()
+                }
 
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.hum3?.toFloat()} %"
@@ -212,6 +237,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             var entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
 
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("temp1").toString()
+                }
+
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.temp1?.toFloat()} °C"
             binding.sensorType.text = "Temperature"
@@ -233,6 +264,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
             var entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
+
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("temp2").toString()
+                }
 
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.temp2?.toFloat()} °C"
@@ -256,6 +293,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             var entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
 
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("temp3").toString()
+                }
+
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.temp3?.toFloat()} °C"
             binding.sensorType.text = "Temperature"
@@ -278,6 +321,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
             var entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
+
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("switch1").toString()
+                }
 
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.switch1}"
@@ -318,6 +367,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             var entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
 
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("switch2").toString()
+                }
+
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.switch2}"
             binding.sensorType.text = "Switch"
@@ -355,6 +410,12 @@ class SensorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
             var entry = ArrayList<Entry>()
             var lastValue = listanueva.size - 1
+
+            dbUsers.document(firebaseAuth.currentUser?.email!!)
+                .collection("linked_devices")
+                .document(listanueva[0]?.deviceId!!).get().addOnSuccessListener {
+                    binding.sensorName.text = it.data?.get("switch3").toString()
+                }
 
             //Cargo los datos en de los ultimos valores en la tarjeta
             binding.LastSensorValue.text = "${listanueva[lastValue]?.switch3}"

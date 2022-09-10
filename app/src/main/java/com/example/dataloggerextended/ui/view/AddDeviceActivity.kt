@@ -91,22 +91,22 @@ class AddDeviceActivity : AppCompatActivity() {
             if (model == "esp32/h/t"){
                 docData =hashMapOf(
                     "devName" to binding.etDeviceName.text.toString(),
-                    "devHum" to binding.etHumName.text.toString(),
-                    "devTemp" to binding.etTempName.text.toString())
+                    "hum1" to binding.etHumName.text.toString(),
+                    "temp1" to binding.etTempName.text.toString())
             }
 
             if (model == "Lebym-Do"){
                 docData =hashMapOf(
                     "devName" to binding.etDeviceName.text.toString(),
-                    "temp-TRD1" to "Temp - TRD1 ",
-                    "temp-TRD2" to "Temp - TRD2",
-                    "temp-TRD3" to "Temp - TRD3",
+                    "temp1" to "Temp - TRD1 ",
+                    "temp2" to "Temp - TRD2",
+                    "temp3" to "Temp - TRD3",
                     "temp -BME" to "Temp - BME",
-                    "hum-BME" to "Hum - BME",
+                    "hum1" to "Hum - BME",
                     "press-BME" to "Press - BME",
-                    "error-motor1" to "Error - motor1",
-                    "error-motor2" to "Error - motor2",
-                    "door_is_open" to "Door is open")
+                    "switch1" to "Door is open",
+                    "switch2" to "Error - motor1",
+                    "switch3" to "Error - motor2")
             }
 
             dbDevices.document(firebaseAuth.currentUser!!.email!!).collection("linked_devices").document(device!!).set(docData)
