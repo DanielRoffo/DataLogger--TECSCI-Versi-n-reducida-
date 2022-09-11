@@ -29,6 +29,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DevicesActivity : AppCompatActivity() {
 
@@ -145,14 +146,16 @@ class DevicesActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun processDevicesResponse(state: ScreenState<List<UserDevice?>>) {
+    private suspend fun processDevicesResponse(state: ScreenState<List<UserDevice?>>) {
         when (state) {
             is ScreenState.Loading -> {
 
             }
             is ScreenState.Success -> {
 
-                myAdapter.setData(state.data as List<UserDevice>)
+                withContext(Dispatchers.Main){
+                    myAdapter.setData(state.data as List<UserDevice>)
+                }
 
             }
             is ScreenState.Error ->{

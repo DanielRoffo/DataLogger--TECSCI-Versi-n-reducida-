@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dataloggerextended.R
 import com.example.dataloggerextended.adapters.mainFragment.devices.DevicesAdapter
@@ -24,6 +25,9 @@ import com.example.dataloggerextended.utils.ScreenState
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,20 +60,27 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Cargo los devices que el usuario tenga asociados a él
-        viewModel.getUserDevices(firebaseAuth.currentUser!!.email!!)
+        lifecycleScope.launch(Dispatchers.IO){
+            //Cargo los devices que el usuario tenga asociados a él
+            viewModel.getUserDevices(firebaseAuth.currentUser!!.email!!)
+        }
+
 
         initRecyclerView()
 
         //Observo del MainViewModel si hay cambios en los datos de device
         viewModel.device.observe(this , { state ->
-            //si se actualizan los devices del usuario procede a buscar los datos de cada devices
-            processDevicesResponse(state)
+            lifecycleScope.launch(Dispatchers.IO) {
+                //si se actualizan los devices del usuario procede a buscar los datos de cada devices
+                processDevicesResponse(state)
+            }
         })
 
         //Observo del MainViewModel si hay cambios en los datos de deviceWithData
         viewModel.deviceWithData.observe(this, { state ->
-            processDevicesDataResponse(state)
+            lifecycleScope.launch(Dispatchers.IO) {
+                processDevicesDataResponse(state)
+            }
         })
 
 
@@ -166,22 +177,26 @@ class MainActivity : AppCompatActivity() {
 
     //Activa o desactiva las vistas de loading dependiendo del estado de los datos recibidos
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun processDevicesDataResponse(state: ScreenState<List<DeviceData?>>) {
+    private suspend fun processDevicesDataResponse(state: ScreenState<List<DeviceData?>>) {
         when (state) {
             is ScreenState.Loading -> {
                 //no toco nada aca por q el progress bar ya esta en visible de la otra funcion
 
             }
             is ScreenState.Success -> {
-                binding.viewLoading.visibility = View.GONE
+                withContext(Dispatchers.Main){
+                    binding.viewLoading.visibility = View.GONE
+                }
+
                 //Ordeno la lista que llega con todos los datos de cada device
                 val organizedList = reorganizeData(state.data)
                 //Inicializo el RecyclerView con toda la info de los devices
                 //La info se encuentra ordenada en una lista de devices que contiene una lista por cada sensor
                 //Y cada sensor tiene una lista de DeviceData
 
-                myAdapter?.setData(organizedList)
-
+                withContext(Dispatchers.Main) {
+                    myAdapter?.setData(organizedList)
+                }
             }
             is ScreenState.Error -> {
                 binding.viewLoading.visibility = View.GONE
