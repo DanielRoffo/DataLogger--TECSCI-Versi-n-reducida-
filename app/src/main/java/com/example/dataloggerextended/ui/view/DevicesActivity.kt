@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dataloggerextended.R
 import com.example.dataloggerextended.adapters.userDevices.UserDevicesAdapter
@@ -26,6 +27,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DevicesActivity : AppCompatActivity() {
 
@@ -56,13 +59,17 @@ class DevicesActivity : AppCompatActivity() {
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance()
 
-        viewModel.getUserDevices(firebaseAuth.currentUser!!.email!!)
+        lifecycleScope.launch(Dispatchers.IO){
+            viewModel.getUserDevices(firebaseAuth.currentUser!!.email!!)
+        }
 
         initRecyclerView()
 
         //Observo del MainViewModel si hay cambios en los datos de movieLiveData
         viewModel.device.observe(this ,{ state ->
-            processDevicesResponse(state)
+            lifecycleScope.launch(Dispatchers.IO) {
+                processDevicesResponse(state)
+            }
         })
 
         addNewDevice()
