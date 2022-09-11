@@ -3,10 +3,14 @@ package com.example.dataloggerextended.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.dataloggerextended.model.SensorData
 import com.example.dataloggerextended.utils.ScreenState
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 
 class IndividualSensorViewModel() : ViewModel() {
@@ -21,61 +25,70 @@ class IndividualSensorViewModel() : ViewModel() {
 
     fun getDataFromSensor(device: String, sensor: String) {
 
-        //activa el loading screen antes de arrancar a buscar los datos
-        _individualDataSet.postValue(ScreenState.Loading(null))
+        viewModelScope.launch {
 
-        //Recorro cada uno de los devices y voy cargando la info obtenida de firebase en una lista
-
-        dbDevices.document(device).collection("datos").addSnapshotListener { snapshot, e ->
-
-            // si hay una excepcion, se sube el mensaje
-            if (e != null) {
-                _individualDataSet.postValue(ScreenState.Error(e.message.toString(), null))
-                return@addSnapshotListener
+            withContext(Dispatchers.Main){
+                //activa el loading screen antes de arrancar a buscar los datos
+                _individualDataSet.postValue(ScreenState.Loading(null))
             }
 
-            // si estamos aca, no hubo errores
+            withContext(Dispatchers.IO){
 
-            if (snapshot != null) {
+                //Recorro cada uno de los devices y voy cargando la info obtenida de firebase en una lista
 
-                //convierte cada uno de los documentos de cada device en un DeviceData y los junta en una lista
-                val documents = snapshot.documents
+                dbDevices.document(device).collection("datos").addSnapshotListener { snapshot, e ->
 
-                documents.forEach { it ->
+                    // si hay una excepcion, se sube el mensaje
+                    if (e != null) {
+                        _individualDataSet.postValue(ScreenState.Error(e.message.toString(), null))
+                        return@addSnapshotListener
+                    }
 
-                    val sensorData = it.toObject(SensorData::class.java)
-                    if (sensorData != null) {
-                        it.data?.forEach {
-                            //carga los datos de cada titulo del documento dentro del sensorData
+                    // si estamos aca, no hubo errores
 
-                            when (it.key) {
-                                sensor -> {
-                                    sensorData?.sensorVal = it.value.toString()
+                    if (snapshot != null) {
+
+                        //convierte cada uno de los documentos de cada device en un DeviceData y los junta en una lista
+                        val documents = snapshot.documents
+
+                        documents.forEach { it ->
+
+                            val sensorData = it.toObject(SensorData::class.java)
+                            if (sensorData != null) {
+                                it.data?.forEach {
+                                    //carga los datos de cada titulo del documento dentro del sensorData
+
+                                    when (it.key) {
+                                        sensor -> {
+                                            sensorData?.sensorVal = it.value.toString()
+                                        }
+                                        "timestamp" -> {
+
+                                            val formatter  = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+                                            val timestamp = it.value.toString()
+                                            val date = formatter.parse(timestamp)
+
+                                            sensorData?.time = date
+                                        }
+                                    }
                                 }
-                                "timestamp" -> {
 
-                                    val formatter  = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
-                                    val timestamp = it.value.toString()
-                                    val date = formatter.parse(timestamp)
+                                //Reviso que no hayan datos repetidos
+                                val myDevice: SensorData? =
+                                    allDataFromSensor.firstOrNull { it?.time == sensorData.time }
 
-                                    sensorData?.time = date
+                                if (myDevice == null) {
+                                    allDataFromSensor.add(sensorData)
                                 }
                             }
                         }
 
-                        //Reviso que no hayan datos repetidos
-                        val myDevice: SensorData? =
-                            allDataFromSensor.firstOrNull { it?.time == sensorData.time }
 
-                        if (myDevice == null) {
-                            allDataFromSensor.add(sensorData)
-                        }
+                        //Cargo la lista en la variable _devices y la mando con success para continuar
+                        _individualDataSet.postValue(ScreenState.Success(allDataFromSensor))
                     }
                 }
 
-
-                //Cargo la lista en la variable _devices y la mando con success para continuar
-                _individualDataSet.postValue(ScreenState.Success(allDataFromSensor))
 
             }
         }

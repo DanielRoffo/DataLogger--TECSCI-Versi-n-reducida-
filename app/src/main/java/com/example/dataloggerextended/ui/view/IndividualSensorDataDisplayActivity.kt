@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dataloggerextended.R
 import com.example.dataloggerextended.adapters.indSensorData.IndSensorDataAdapter
@@ -28,6 +29,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.sql.Date
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
@@ -57,32 +62,41 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance()
 
+        binding = ActivityIndividualSensorDataDisplayBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         val data = intent.getSerializableExtra("data")
         var dataAsArray = data as ArrayList<String>
 
         // Cambiar el color del SupportActionBar
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.light_black)))
-
-        //Agrego un boton de regreso al MainActivity y cambio el titulo del action bar
-
-        dbUsers.document(firebaseAuth.currentUser?.email!!)
-            .collection("linked_devices")
-            .document(dataAsArray[0]).get().addOnSuccessListener {
-                supportActionBar!!.title = "${it["devName"]} - ${it[dataAsArray[1]]}"
-            }
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
+        lifecycleScope.launch(){
 
-        binding = ActivityIndividualSensorDataDisplayBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+            //Agrego un boton de regreso al MainActivity y cambio el titulo del action bar
+            lifecycleScope.launch(Dispatchers.IO){
+                dbUsers.document(firebaseAuth.currentUser?.email!!)
+                    .collection("linked_devices")
+                    .document(dataAsArray[0]).get().addOnSuccessListener {
+                            supportActionBar!!.title = "${it["devName"]} - ${it[dataAsArray[1]]}"
+                    }
+            }
 
-        getData()
+            lifecycleScope.launch(Dispatchers.IO){
+                getData()
+            }
+
+        }
+
 
         initRecyclerView()
 
         //Observo del MainViewModel si hay cambios en los datos de individualDataSet
         viewModel.individualDataSet.observe(this ,{ state ->
-            processDevicesResponse(state)
+            lifecycleScope.launch(Dispatchers.IO) {
+                processDevicesResponse(state)
+            }
         })
 
 
@@ -100,41 +114,51 @@ class IndividualSensorDataDisplayActivity : AppCompatActivity() {
             }
             is ScreenState.Success -> {
 
-                var yvalue = mutableListOf<Entry>()
-                var isStepped: Boolean = false
-                var organizedList = state.data?.sortedByDescending { it?.time }
-                if (organizedList != null) {
-                    myAdapter?.setData(organizedList)
-                }
-                organizedList = state.data?.sortedBy { it?.time }
-                var xOld = Timestamp(System.currentTimeMillis()).time
-                organizedList?.forEach() {it ->
-                    //Formateo el tiempo
+                lifecycleScope.launch{
 
-                    val timestamp = it?.time!!.time
-                    var dateToString = simpleDateFormated.format(timestamp)
-                    val index = timestamp.toFloat()
+                    var yvalue = mutableListOf<Entry>()
+                    var isStepped: Boolean = false
 
-                    if (it?.sensorVal == "true" || it?.sensorVal == "false"){
-                        if (it?.sensorVal == "true"){
-                            yvalue.add(Entry(index, 1F))
-                        }else{
-                            yvalue.add(Entry(index, 0F))
+
+                    var organizedList = async { state.data?.sortedByDescending { it?.time } }
+
+                    myAdapter.setData(organizedList.await()!!)
+
+                    lifecycleScope.launch(Dispatchers.Default){
+                        var organizedList = state.data?.sortedBy { it?.time }
+                        organizedList?.forEach() {it ->
+                            //Formateo el tiempo
+
+                            val timestamp = it?.time!!.time
+                            var dateToString = simpleDateFormated.format(timestamp)
+                            val index = timestamp.toFloat()
+
+                            if (it?.sensorVal == "true" || it?.sensorVal == "false"){
+                                if (it?.sensorVal == "true"){
+                                    yvalue.add(Entry(index, 1F))
+                                }else{
+                                    yvalue.add(Entry(index, 0F))
+                                }
+                                isStepped = true
+
+                            }else{
+                                yvalue.add(Entry(index, it?.sensorVal.toString().toFloat()))
+                            }
+
                         }
-                        isStepped = true
+                        withContext(Dispatchers.Main){
+                            setLineChartData(yvalue, isStepped)
+                            binding.viewLoading1.visibility = View.GONE
+                            binding.viewLoading2.visibility = View.GONE
+                            binding.lineChart.visibility = View.VISIBLE
+                            binding.singleSensorRv.visibility = View.VISIBLE
+                        }
 
-                    }else{
-                        yvalue.add(Entry(index, it?.sensorVal.toString().toFloat()))
                     }
 
 
-
                 }
-                setLineChartData(yvalue, isStepped)
-                binding.viewLoading1.visibility = View.GONE
-                binding.viewLoading2.visibility = View.GONE
-                binding.lineChart.visibility = View.VISIBLE
-                binding.singleSensorRv.visibility = View.VISIBLE
+
 
             }
             is ScreenState.Error -> {
